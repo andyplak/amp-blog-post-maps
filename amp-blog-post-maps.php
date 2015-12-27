@@ -10,8 +10,16 @@ Author URI: http://www.andyplace.co.uk
 */
 if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-function amp_blog_post_map_shortcode() {
+function amp_blog_post_map_shortcode( $args ) {
 	global $wpdb;
+
+	if( !isset( $args['height'] ) ) {
+		$args['height'] = '400px';
+	}
+
+	if( !isset( $args['width'] ) ) {
+		$args['width'] = '100%';
+	}
 
 	// Lookup all locations (custom query)
 	$rows = $wpdb->get_results($wpdb->prepare(
@@ -28,7 +36,7 @@ function amp_blog_post_map_shortcode() {
 
 	// output as data attributes within map div
 	if( count( $rows ) ) {
-		echo '<div id="amp-map" style="height: 400px; width: 100%"></div>';
+		echo '<div id="amp-map" style="height: '.$args['height'].'; width: '.$args['width'].'"></div>';
 		foreach( $rows as $row ) {
 			$location = unserialize( $row->meta_value );
 			echo '<div class="map-marker" data-post-id="'.$row->post_id.'" data-title="'.$row->post_title.'"
