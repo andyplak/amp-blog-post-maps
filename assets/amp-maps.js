@@ -27,6 +27,8 @@ function initAmpMap() {
 function addPostMarkers() {
 
   var bounds = new google.maps.LatLngBounds();
+  var infowindow = new google.maps.InfoWindow();
+  var baseUrl = jQuery( "#amp-map").data('url');
 
   jQuery( ".map-marker" ).each(function( index ) {
     if( jQuery( this ).data( 'lat' ) && jQuery( this ).data( 'lng' ) ) {
@@ -39,6 +41,13 @@ function addPostMarkers() {
         map: map,
         title: jQuery( this ).data( 'title' ),
       });
+
+      var url = baseUrl + jQuery( this ).data( 'post-id' );
+      var content = '<strong>'+jQuery( this ).data( 'title' )+'</strong><br />';
+      content += jQuery( this ).data( 'date' )+'<br />';
+      content += '<a href="'+url+'" target="_new">view post</a>';
+      makeInfoWindowEvent(map, infowindow, marker, content );
+
       markers.push(marker);
     }
   });
@@ -56,6 +65,13 @@ function removePostMarkers() {
 function refreshPostMarkers() {
   removePostMarkers();
   addPostMarkers();
+}
+
+function makeInfoWindowEvent(map, infowindow, marker, contentString) {
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(contentString);
+    infowindow.open(map, marker);
+  });
 }
 
 jQuery(function() {

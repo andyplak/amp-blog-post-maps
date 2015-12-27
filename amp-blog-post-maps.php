@@ -36,13 +36,15 @@ function amp_blog_post_map_shortcode( $args ) {
 
 	$ret = '';
 
+	$base_post_url = get_site_url()."?p=";
+
 	// output as data attributes within map div
 	if( count( $rows ) ) {
-		$ret = '<div id="amp-map" style="height: '.$args['height'].'; width: '.$args['width'].'"></div>';
+		$ret = '<div id="amp-map" style="height: '.$args['height'].'; width: '.$args['width'].'" data-url="'.$base_post_url.'"></div>';
 		foreach( $rows as $row ) {
 			$location = unserialize( $row->meta_value );
 			$ret.='<div class="map-marker" data-post-id="'.$row->post_id.'" data-title="'.$row->post_title.'"
-					data-lat="'.$location['lat'].'" data-lng="'.$location['lng'].'"></div>';
+					data-lat="'.$location['lat'].'" data-lng="'.$location['lng'].'" data-date="'.$row->post_date.'"></div>';
 		}
 	}else{
 		$ret.= '<p class="warning">No location data found</p>';
