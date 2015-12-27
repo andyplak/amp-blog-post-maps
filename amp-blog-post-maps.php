@@ -34,17 +34,21 @@ function amp_blog_post_map_shortcode( $args ) {
 		'publish'
 	));
 
+	$ret = '';
+
 	// output as data attributes within map div
 	if( count( $rows ) ) {
-		echo '<div id="amp-map" style="height: '.$args['height'].'; width: '.$args['width'].'"></div>';
+		$ret = '<div id="amp-map" style="height: '.$args['height'].'; width: '.$args['width'].'"></div>';
 		foreach( $rows as $row ) {
 			$location = unserialize( $row->meta_value );
-			echo '<div class="map-marker" data-post-id="'.$row->post_id.'" data-title="'.$row->post_title.'"
+			$ret.='<div class="map-marker" data-post-id="'.$row->post_id.'" data-title="'.$row->post_title.'"
 					data-lat="'.$location['lat'].'" data-lng="'.$location['lng'].'"></div>';
 		}
 	}else{
-		echo '<p class="warning">No location data found</p>';
+		$ret.= '<p class="warning">No location data found</p>';
 	}
+
+	return $ret;
 }
 add_shortcode( 'blog-post-map', 'amp_blog_post_map_shortcode' );
 
