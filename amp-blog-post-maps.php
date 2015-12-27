@@ -28,16 +28,22 @@ function amp_blog_post_map_shortcode() {
 
 	// output as data attributes within map div
 	if( count( $rows ) ) {
-		echo '<div class="amp-map">';
+		echo '<div id="amp-map" style="height: 400px; width: 100%"></div>';
 		foreach( $rows as $row ) {
 			$location = unserialize( $row->meta_value );
-			echo '<div class="marker" data-post-id="'.$row->post_id.'" data-title="'.$row->post_title.'"
+			echo '<div class="map-marker" data-post-id="'.$row->post_id.'" data-title="'.$row->post_title.'"
 					data-lat="'.$location['lat'].'" data-lng="'.$location['lng'].'"></div>';
 		}
-		echo '</div>';
 	}else{
 		echo '<p class="warning">No location data found</p>';
 	}
 }
 add_shortcode( 'blog-post-map', 'amp_blog_post_map_shortcode' );
 
+function amp_map_enqueue_scripts() {
+
+	wp_register_script( 'amp-maps', plugin_dir_url( __FILE__ ) . '/assets/amp-maps.js', array( 'jquery' ));
+	wp_enqueue_script( 'amp-maps' );
+	wp_enqueue_script( 'amp-google-maps', 'https://maps.googleapis.com/maps/api/js');
+}
+add_action( 'wp_enqueue_scripts', 'amp_map_enqueue_scripts' );
