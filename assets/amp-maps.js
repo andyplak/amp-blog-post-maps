@@ -26,17 +26,24 @@ function initAmpMap() {
  */
 function addPostMarkers() {
 
+  var bounds = new google.maps.LatLngBounds();
+
   jQuery( ".map-marker" ).each(function( index ) {
     if( jQuery( this ).data( 'lat' ) && jQuery( this ).data( 'lng' ) ) {
 
+      var pos = new google.maps.LatLng( jQuery( this ).data( 'lat' ), jQuery( this ).data( 'lng' ) );
+      bounds.extend( pos );
+
       var marker = new google.maps.Marker({
-        position: { lat: jQuery( this ).data( 'lat' ), lng: jQuery( this ).data( 'lng' ) },
+        position: pos,
         map: map,
         title: jQuery( this ).data( 'title' ),
       });
       markers.push(marker);
     }
   });
+
+  map.fitBounds(bounds);
 }
 
 function removePostMarkers() {
